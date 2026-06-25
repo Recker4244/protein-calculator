@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Saral Daily Protein Calculator</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --green: #0B5C4A;
+            --green-light: #EAF5F2;
+            --gold: #D4A24C;
+            --bg: #F8F7F4;
+            --text: #222;
+            --muted: #6B7280;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            color: var(--green);
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-top: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .hero h1 {
+            font-size: 34px;
+            color: var(--green);
+            line-height: 1.15;
+        }
+
+        .hero p {
+            margin-top: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .start-btn,
+        .next-btn,
+        .result-btn {
+            width: 100%;
+            border: none;
+            background: var(--green);
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            padding: 18px;
+            border-radius: 18px;
+            cursor: pointer;
+        }
+
+        .start-btn {
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .step {
+            margin-top: 30px;
+        }
+
+        .step h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            border-radius: 16px;
+            border: 1px solid #ddd;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 18px;
+            border: 2px solid #e6e6e6;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .option.selected {
+            border-color: var(--green);
+            background: var(--green-light);
+        }
+
+        .progress {
+            width: 100%;
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 25%;
+            background: var(--green);
+            transition: .3s;
+        }
+
+        .result-screen {
+            margin-top: 20px;
+        }
+
+        .result-number {
+            font-size: 54px;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .result-unit {
+            color: var(--muted);
+        }
+
+        .metric-card {
+            margin-top: 16px;
+            background: white;
+            border-radius: 20px;
+            padding: 18px;
+        }
+
+        .metric-title {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 6px;
+        }
+
+        .gap-bar {
+            margin-top: 15px;
+            background: #ECECEC;
+            height: 14px;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .gap-fill {
+            height: 100%;
+            background: var(--gold);
+        }
+
+        .tip-box {
+            background: #FFF8E9;
+            border-left: 5px solid var(--gold);
+            padding: 16px;
+            border-radius: 14px;
+            margin-top: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .share-btn {
+            width: 100%;
+            margin-top: 16px;
+            background: var(--gold);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 18px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        @media (max-width:480px) {
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .result-number {
+                font-size: 46px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div id="landing">
+
+            <div class="logo">SARAL</div>
+
+            <div class="hero">
+                <h1>Daily Protein Calculator</h1>
+
+                <p>
+                    Find out how much protein your body needs every day.
+                    Get a personalized recommendation in less than 30 seconds.
+                </p>
+
+                <button class="start-btn" onclick="startCalculator()">
+                    Start
+                </button>
+            </div>
+
+        </div>
+
+        <div id="calculator" class="hidden">
+
+            <div class="progress">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- STEP 1 -->
+            <div class="card step" id="step1">
+                <h2>Your Age</h2>
+                <p>Enter your age in years.</p>
+
+                <input type="number" class="input" id="age" placeholder="e.g. 30">
+
+                <button class="next-btn" onclick="goToStep(2)">
+                    Continue
+                </button>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="card step hidden" id="step2">
+                <h2>Your Weight</h2>
+                <p>Enter your body weight in kilograms.</p>
+
+                <input type="number" class="input" id="weight" placeholder="e.g. 70">
+
+                <button class="next-btn" onclick="goToStep(3)">
+                    Continue
+                </button>
+            </div>
+
+            <!-- STEP 3 -->
+            <div class="card step hidden" id="step3">
+
+                <h2>Your Goal</h2>
+
+                <p>Choose the option that best describes you.</p>
+
+                <div class="options">
+
+                    <div class="option" onclick="selectGoal(this,'health')">
+                        General Health
+                    </div>
+
+                    <div class="option" onclick="selectGoal(this,'active')">
+                        Stay Active
+                    </div>
+
+                    <div class="option" onclick="selectGoal(this,'strength')">
+                        Build Strength
+                    </div>
+
+                    <div class="option" onclick="selectGoal(this,'senior')">
+                        Healthy Aging
+                    </div>
+
+                </div>
+
+                <button class="result-btn" onclick="calculateProtein()">
+                    See My Requirement
+                </button>
+
+            </div>
+
+            <!-- RESULTS -->
+            <div id="results" class="hidden result-screen">
+
+                <div class="card">
+
+                    <div style="text-align:center">
+
+                        <div class="result-number" id="proteinValue">
+                            0
+                        </div>
+
+                        <div class="result-unit">
+                            grams of protein per day
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="metric-card">
+
+                    <div class="metric-title">
+                        Estimated Average Intake
+                    </div>
+
+                    <div class="metric-value">
+                        60 g/day
+                    </div>
+
+                </div>
+
+                <div class="metric-card">
+
+                    <div class="metric-title">
+                        Your Protein Gap
+                    </div>
+
+                    <div class="metric-value" id="gapValue">
+                        0 g/day
+                    </div>
+
+                    <div class="gap-bar">
+                        <div class="gap-fill" id="gapFill"></div>
+                    </div>
+
+                </div>
+
+                <div class="tip-box">
+
+                    <strong>Why Protein Matters</strong>
+
+                    <br><br>
+
+                    Protein helps support muscle maintenance,
+                    recovery, strength, and healthy aging.
+
+                </div>
+
+                <div class="tip-box">
+
+                    <strong>Simple Ways to Increase Protein Intake</strong>
+
+                    <ul style="margin-top:10px;padding-left:18px;">
+                        <li>Add protein-rich foods at breakfast.</li>
+                        <li>Include dairy, legumes, eggs or paneer.</li>
+                        <li>Spread protein across all meals.</li>
+                        <li>Choose higher-protein everyday foods.</li>
+                    </ul>
+
+                </div>
+
+                <button class="share-btn" onclick="shareResult()">
+                    Share My Result
+                </button>
+
+                <div class="footer">
+                    Powered by Saral
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        let selectedGoal = "";
+
+        function startCalculator() {
+            document.getElementById("landing").classList.add("hidden");
+            document.getElementById("calculator").classList.remove("hidden");
+        }
+
+        function goToStep(step) {
+
+            if (step === 2) {
+
+                const age = document.getElementById("age").value;
+
+                if (!age) {
+                    alert("Please enter your age");
+                    return;
+                }
+
+                document.getElementById("step1").classList.add("hidden");
+                document.getElementById("step2").classList.remove("hidden");
+                document.getElementById("progressFill").style.width = "66%";
+            }
+
+            if (step === 3) {
+
+                const weight = document.getElementById("weight").value;
+
+                if (!weight) {
+                    alert("Please enter your weight");
+                    return;
+                }
+
+                document.getElementById("step2").classList.add("hidden");
+                document.getElementById("step3").classList.remove("hidden");
+                document.getElementById("progressFill").style.width = "100%";
+            }
+        }
+
+        function selectGoal(element, goal) {
+
+            selectedGoal = goal;
+
+            document.querySelectorAll(".option")
+                .forEach(x => x.classList.remove("selected"));
+
+            element.classList.add("selected");
+        }
+
+        function calculateProtein() {
+
+            const age =
+                parseInt(document.getElementById("age").value);
+
+            const weight =
+                parseFloat(document.getElementById("weight").value);
+
+            if (!selectedGoal) {
+                alert("Please select a goal");
+                return;
+            }
+
+            let factor = 0.8;
+
+            switch (selectedGoal) {
+
+                case "health":
+                    factor = 0.8;
+                    break;
+
+                case "active":
+                    factor = 1.2;
+                    break;
+
+                case "strength":
+                    factor = 1.8;
+                    break;
+
+                case "senior":
+                    factor = 1.3;
+                    break;
+            }
+
+            if (age >= 60) {
+                factor = Math.max(factor, 1.3);
+            }
+
+            const protein =
+                Math.round(weight * factor);
+
+            const average =
+                60;
+
+            const gap =
+                Math.max(0, protein - average);
+
+            document.getElementById("proteinValue")
+                .innerText = protein;
+
+            document.getElementById("gapValue")
+                .innerText = gap + " g/day";
+
+            document.getElementById("gapFill")
+                .style.width =
+                Math.min((gap / protein) * 100, 100) + "%";
+
+            document.getElementById("step3")
+                .classList.add("hidden");
+
+            document.getElementById("results")
+                .classList.remove("hidden");
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        async function shareResult() {
+
+            const protein =
+                document.getElementById("proteinValue").innerText;
+
+            const text =
+                `My daily protein requirement is ${protein}g/day. Calculated using the Saral Daily Protein Calculator.`;
+
+            if (navigator.share) {
+
+                navigator.share({
+                    title: "Daily Protein Requirement",
+                    text: text
+                });
+
+            } else {
+
+                navigator.clipboard.writeText(text);
+                alert("Result copied to clipboard");
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
